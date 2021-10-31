@@ -22,9 +22,10 @@ console.log(uri);
 async function run() {
   try {
     await client.connect();
-    console.log('nayem')
+    console.log("nayem");
     const database = client.db(process.env.DB_NAME);
     const servicesCollection = database.collection("services");
+    const ordersCollection = database.collection("orders");
 
     // GET ALL SERVICES API
     app.get("/services", async (req, res) => {
@@ -41,6 +42,31 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const service = await servicesCollection.findOne(query);
       res.json(service);
+    });
+    // GET ORDER API
+    app.get("/orders", async (req, res) => {
+      const cursor = ordersCollection.find({});
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // POST ORDER API
+    app.post("/orders", async (req, res) => {
+      const order = req.body;
+      console.log("hit the post api", order);
+
+      const result = await ordersCollection.insertOne(order);
+      console.log(result);
+      res.json(result);
+    });
+
+    // DELETE ORDER API
+    app.delete("/orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await ordersCollection.deleteOne(query);
+      console.log("deleting user with id", result);
+      res.json(result);
     });
 
     // console.log(`A document was inserted with the _id: ${result.insertedId}`)
