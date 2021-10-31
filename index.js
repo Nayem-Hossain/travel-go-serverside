@@ -43,7 +43,7 @@ async function run() {
       res.json(service);
     });
 
-    // console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    // console.log(`A document was inserted with the _id: ${result.insertedId}`)
   } finally {
     // await client.close();
   }
